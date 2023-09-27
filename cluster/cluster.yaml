@@ -1,0 +1,29 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: bschmitt-fargate
+  region: us-west-2
+
+managedNodeGroups:
+- name: demo-ng
+  desiredCapacity: 2
+  instanceType: t3.large
+
+fargateProfiles:
+  - name: fp-default
+    selectors:
+      # All workloads in the "default" Kubernetes namespace will be
+      # scheduled onto Fargate:
+      - namespace: default
+      - namespace: kube-system
+  - name: demo
+    selectors:
+      # All workloads in the "demo" Kubernetes namespace matching the following
+      # label selectors will be scheduled onto Fargate:
+      - namespace: demo
+  - name: newrelic
+    selectors:
+      # All workloads in the "newrelic" Kubernetes namespace matching the following
+      # label selectors will be scheduled onto Fargate:
+      - namespace: newrelic
